@@ -55,23 +55,31 @@ def get_my_flat(link):
     closestTime = stationDict[closestStation]
     
     # посудомойка
-    if 'dishwasher_disabled.png' in r.text:
-        dishwasher = 0
-    else:
-        dishwasher = 1
-    
+    mydivs = soup.findAll('li', {'class': 'Offer__featuresItem Offer__featuresItem--disabled'})
+    dishwasher = 1
+    balcony = 1
+    for i in range(len(mydivs)):
+        if 'Посудомоечная машина' in str(mydivs[i]):
+            dishwasher = 0
+        if 'Балкон' in str(mydivs[i]):
+            balcony = 0
+
+    # этаж
+    mydivs = soup.findAll('div', {'class': 'Offer__detailsValue'})
+    for i in range(len(mydivs)):
+        if len(re.findall(r'/\d', str(mydivs[i]))) > 0:
+            floors = re.findall(r'\d', str(mydivs[i]))
+    floorString = str(min(floors)) + '/' + str(max(floors))
+
     # комиссия
     comissionRaw = re.findall(r'комиссия \d+%', r.text)[0]
     comission = re.sub(r'\D', '', comissionRaw)
     
-    returnDict = {}
-    
-    returnDict['Все станции: '] = str(ourStations)
-    returnDict['Ближайшее метро: '] = str(closestStation)
-    returnDict['Удаленность от метро (мин): '] = str(closestTime)
-    returnDict['Площадь (м2): '] = str(space)
-    returnDict['Посудомойка: '] = str(dishwasher)
-    returnDict['Стоимость: '] = str(price)
-    returnDict['Комиссия %'] = str(comission)
+    returnDict = {'Все станции: ': str(ourStations), 'Ближайшее метро: ': str(closestStation),
+                  'Удаленность от метро (мин): ': str(closestTime), 'Площадь (м2): ': str(space),
+                  'Посудомойка: ': str(dishwasher), 'Балкон: ': str(balcony), 'Этаж: ': str(floorString),
+                  'Стоимость: ': str(price), 'Комиссия %': str(comission)}
 
     return returnDict
+
+
