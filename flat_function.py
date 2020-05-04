@@ -75,10 +75,10 @@ def get_my_flat(link):
     comissionRaw = re.findall(r'комиссия \d+%', r.text)[0]
     comission = re.sub(r'\D', '', comissionRaw)
     
-    returnDict = {'Все станции: ': str(ourStations), 'Ближайшее метро: ': str(closestStation),
-                  'Удаленность от метро (мин): ': str(closestTime), 'Площадь (м2): ': str(space),
-                  'Посудомойка: ': str(dishwasher), 'Балкон: ': str(balcony), 'Этаж: ': str(floorString),
-                  'Стоимость: ': str(price), 'Комиссия %': str(comission)}
+    returnDict = {'Метро': [str(ourStations)], 'Ближайшая станция метро': [str(closestStation)],
+                  'Удаленность от метро (мин)': [str(closestTime)], 'Площадь (м2)': [str(space)],
+                  'Посудомойка': [str(dishwasher)], 'Балкон': [str(balcony)], 'Этаж': [str(floorString)],
+                  'Стоимость': [str(price)], 'Комиссия %': [str(comission)], 'Ссылка': [str(link)]}
 
     return returnDict
 
